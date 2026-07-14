@@ -1,0 +1,31 @@
+# ==========================
+# NXSPACE Git Ignore
+# ==========================
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Temporary Files
+*.tmp
+*.temp
+
+# Node (未來如果有使用)
+node_modules/
+
+# Environment Files
+.env
+.env.local
+
+# Build Files
+dist/
+build/
