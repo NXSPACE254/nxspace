@@ -1,0 +1,44 @@
+/* ==========================================================================
+   File: css/layout.css
+   Project: NXSPACE Platform
+   Description: Clean responsive layout frame.
+                Strictly layout properties only. No background, color, borders, spacing, positioning, or animations.
+   Version: 1.5
+   ========================================================================== */
+
+/* 1. 全局 body 基礎佈局 */
+body {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* 2. 最外層全局容器 */
+#app {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* 3. 頂部導航容器 */
+.site-header {
+  display: flex;
+  width: 100%;
+}
+
+/* 4. 主內容工作區 */
+.site-main {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  width: 100%;
+}
+
+/* 5. 頁尾資訊容器 */
+.site-footer {
+  display: flex;
+  width: 100%;
+}
