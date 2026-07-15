@@ -1,21 +1,51 @@
 /**
- * ==========================================================================
- * File: js/app.js
- * Project: NXSPACE Platform
- * Description: Single Application Entrypoint. Handles system initialization.
- *              No DOM manipulation, routing, or API integrations are included in this stage.
- * Version: 1.1
- * ==========================================================================
+ * @file app.js
+ * @description Application entry point and orchestrator for NXSPACE Platform Beta V1.
+ * @module app
  */
+
+import { createMainLayout } from "./layouts/main-layout.js";
+import { createHeader } from "./components/header.js";
+import { createFooter } from "./components/footer.js";
+import { createNavigation } from "./components/navigation.js";
+import { createHome } from "./pages/home.js";
+import { initializeRouter } from "./router/router.js";
+import { render } from "./utils/dom.js";
 
 /**
- * 初始化 NXSPACE 平台系統
+ * Initializes the application and renders components sequentially.
+ * @returns {void}
  */
 function initializeApp() {
-  console.log("NXSPACE Platform Initialized");
+  // 1. 取得 app 容器
+  const app = document.getElementById("app");
+
+  // 2. 渲染 MainLayout
+  render(app, createMainLayout());
+
+  // 3. 取得 Layout 內各個主要節點
+  const siteHeader = document.getElementById("site-header");
+  const pageContainer = document.getElementById("page-container");
+  const siteFooter = document.getElementById("site-footer");
+
+  // 4. 渲染 Header
+  render(siteHeader, createHeader());
+
+  // 5. Header 建立後取得 navigation 容器
+  const headerNavigation = document.querySelector(".header-navigation");
+
+  // 6. 渲染 Navigation
+  render(headerNavigation, createNavigation());
+
+  // 7. 渲染 Home 頁面
+  render(pageContainer, createHome());
+
+  // 8. 渲染 Footer
+  render(siteFooter, createFooter());
+
+  // 9. 初始化 Router
+  initializeRouter();
 }
 
-// 當 DOM 樹完全載入且解析完成後，執行系統初始化
-document.addEventListener("DOMContentLoaded", () => {
-  initializeApp();
-});
+// 10. DOMContentLoaded 呼叫 initializeApp
+document.addEventListener("DOMContentLoaded", initializeApp);

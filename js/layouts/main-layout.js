@@ -1,20 +1,24 @@
 /**
- * @file main-layout.js
- * @description Main layout component for NXSPACE Platform Beta V1.
- * @module layouts/main-layout
+ * ==========================================================================
+ * File: js/layouts/main-layout.js
+ * Project: NXSPACE Platform
+ * Description: Main Layout Component.
+ *              Generates the main application layout.
+ * Version: 1.0
+ * ==========================================================================
  */
 
 /**
- * Creates the main layout structure of the application.
- * @returns {HTMLDivElement} The main layout DOM element containing header, main, and footer sections.
+ * 建立主版面 Layout。
+ *
+ * @returns {string}
  */
 export function createMainLayout() {
-  const layout = document.createElement('div');
-  layout.id = 'app-layout';
-  layout.innerHTML = `
-<header id="site-header"></header>
-<main id="page-container"></main>
-<footer id="site-footer"></footer>
-  `.trim();
-  return layout;
+  return `
+    <div id="app-layout">
+      <header id="site-header"></header>
+      <main id="page-container"></main>
+      <footer id="site-footer"></footer>
+    </div>
+  `;
 }
