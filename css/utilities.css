@@ -1,0 +1,51 @@
+/* ========================================================================== 
+   NXSPACE single-purpose utilities
+   ========================================================================== */
+
+.container {
+  width: min(100% - (var(--page-gutter) * 2), var(--container-max));
+  margin-inline: auto;
+}
+
+.reading-width {
+  max-width: var(--container-reading);
+}
+
+.flow > * + * {
+  margin-block-start: var(--flow-space);
+}
+
+.flow {
+  --flow-space: var(--space-4);
+}
+
+.cluster {
+  --cluster-gap: var(--space-4);
+
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cluster-gap);
+  align-items: center;
+}
+
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
+.visually-hidden-focusable:not(:focus, :focus-within) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}

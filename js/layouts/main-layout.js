@@ -16,9 +16,10 @@
 export function createMainLayout() {
   return `
     <div id="app-layout">
-      <header id="site-header"></header>
-      <main id="page-container"></main>
+      <a class="skip-link" href="#page-container">跳至主要內容</a>
+      <div id="site-header"></div>
+      <main id="page-container" tabindex="-1"></main>
       <footer id="site-footer"></footer>
     </div>
-  `;
+  `.trim();
 }

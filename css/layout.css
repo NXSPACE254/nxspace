@@ -1,12 +1,7 @@
-/* ==========================================================================
-   File: css/layout.css
-   Project: NXSPACE Platform
-   Description: Clean responsive layout frame.
-                Strictly layout properties only. No background, color, borders, spacing, positioning, or animations.
-   Version: 1.5
+/* ========================================================================== 
+   NXSPACE responsive application frame
    ========================================================================== */
 
-/* 1. 全局 body 基礎佈局 */
 body {
   display: flex;
   flex-direction: column;
@@ -14,31 +9,72 @@ body {
   min-height: 100vh;
 }
 
-/* 2. 最外層全局容器 */
 #app {
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
+  flex: 1;
   width: 100%;
   min-height: 100vh;
 }
 
-/* 3. 頂部導航容器 */
-.site-header {
+#app-layout {
   display: flex;
-  width: 100%;
-}
-
-/* 4. 主內容工作區 */
-.site-main {
-  display: flex;
+  flex: 1;
   flex-direction: column;
-  flex-grow: 1;
+  width: 100%;
+  min-width: 0;
+  min-height: 100vh;
+}
+
+.skip-link {
+  position: fixed;
+  top: var(--space-3);
+  left: var(--page-gutter);
+  z-index: var(--z-modal);
+  min-height: var(--touch-target);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-text);
+  color: var(--color-primary-contrast);
+  font-weight: var(--font-weight-semibold);
+  text-decoration: none;
+  transform: translateY(calc(-100% - var(--space-6)));
+  transition: transform var(--duration-fast) var(--easing-standard);
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+}
+
+#site-header,
+#site-footer {
+  flex: 0 0 auto;
   width: 100%;
 }
 
-/* 5. 頁尾資訊容器 */
-.site-footer {
+#page-container {
   display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
   width: 100%;
+  min-width: 0;
+}
+
+#page-container:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.home {
+  width: 100%;
+  min-width: 0;
+}
+
+.header-container,
+.hero-container,
+.section-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--page-gutter);
 }

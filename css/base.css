@@ -1,43 +1,56 @@
-/* ==========================================================================
-   File: css/base.css
-   Project: NXSPACE Platform
-   Description: Design Foundation & CSS Reset
+/* ========================================================================== 
+   NXSPACE reset and global element foundations
    ========================================================================== */
 
-/* 1. Design Tokens */
-:root {
-  /* Spacing */
-  --space-xs: 4px;
-  --space-sm: 8px;
-  --space-md: 16px;
-  --space-lg: 24px;
-  --space-xl: 32px;
-
-  /* Border Radius */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
-}
-
-/* 2. CSS Reset */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
 }
 
 html {
+  min-width: 20rem;
+  scroll-behavior: smooth;
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
 }
 
 body {
+  margin: 0;
   min-height: 100vh;
+  overflow-wrap: break-word;
+  background: var(--color-canvas);
+  color: var(--color-text);
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-normal);
+  text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 3. Media Elements */
+h1,
+h2,
+h3,
+h4,
+p {
+  margin-block-start: 0;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+  text-wrap: balance;
+}
+
+p {
+  text-wrap: pretty;
+}
+
 img,
 picture,
 svg,
@@ -47,31 +60,60 @@ canvas {
   max-width: 100%;
 }
 
-/* 4. Form Elements */
-button, input, textarea, select {
+img {
+  height: auto;
+}
+
+button,
+input,
+textarea,
+select {
+  min-height: var(--control-height);
+  color: inherit;
   font: inherit;
-  margin: 0;
-  padding: 0;
-  background: transparent;
-  border: none;
-  outline: none;
 }
 
 button {
   cursor: pointer;
 }
 
+button:disabled {
+  cursor: not-allowed;
+}
+
 textarea {
   resize: vertical;
 }
 
-/* 5. Typography & Links */
 a {
-  text-decoration: none;
   color: inherit;
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.18em;
 }
 
-/* 6. Lists */
-ul, ol {
-  list-style: none;
+:focus-visible {
+  border-radius: var(--radius-sm);
+  outline: 2px solid var(--color-focus);
+  outline-offset: 3px;
+  box-shadow: var(--focus-ring);
+}
+
+::selection {
+  background: var(--color-primary);
+  color: var(--color-primary-contrast);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }

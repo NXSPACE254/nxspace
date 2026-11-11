@@ -1,0 +1,106 @@
+.section {
+  padding: var(--space-24) var(--page-gutter);
+}
+
+.section-container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+}
+
+.section-header {
+  margin-bottom: var(--space-12);
+  text-align: center;
+}
+
+.section-title {
+  margin: 0;
+  color: var(--color-text);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+}
+
+.section-subtitle {
+  max-width: 40rem;
+  margin: var(--space-4) auto 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-relaxed);
+}
+
+.section-content {
+  width: 100%;
+}
+
+.quick-entry-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-6);
+}
+
+.announcement-box {
+  max-width: 56.25rem;
+  margin-inline: auto;
+  padding: var(--space-8);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface-muted);
+  text-align: center;
+  line-height: var(--line-height-relaxed);
+}
+
+.cta-box {
+  padding: var(--space-20) var(--space-8);
+  border-radius: var(--radius-2xl);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-soft));
+  color: var(--color-primary-contrast);
+  text-align: center;
+}
+
+.cta-box h2 {
+  margin-bottom: var(--space-5);
+  color: inherit;
+  font-size: var(--font-size-2xl);
+}
+
+.cta-box p {
+  max-width: var(--container-reading);
+  margin: 0 auto var(--space-8);
+  line-height: var(--line-height-relaxed);
+}
+
+.cta-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.cta-box .btn-primary {
+  background: var(--color-surface);
+  color: var(--color-primary);
+}
+
+.cta-box .btn-secondary {
+  border-color: var(--color-primary-contrast);
+  color: var(--color-primary-contrast);
+}
+
+@media (max-width: 62rem) {
+  .quick-entry-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 48rem) {
+  .section {
+    padding-block: var(--space-16);
+  }
+
+  .quick-entry-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cta-actions {
+    flex-direction: column;
+  }
+}
