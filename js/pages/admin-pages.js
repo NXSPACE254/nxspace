@@ -1,29 +1,14 @@
 import { managementSchemas } from "../config/admin-config.js";
 import { renderFieldError } from "../utils/validator.js";
+export { createLoginPage } from "./admin-login.js";
 
 function escapeHtml(value = "") { return String(value).replace(/[&<>"]/g, (char) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[char])); }
 function statusLabel(status) { return status === "published" ? "已發布" : status === "draft" ? "草稿" : "已下架"; }
 
-export function createLoginPage({ setup = false, message = "" } = {}) {
-  return `<main class="admin-auth-page"><section class="admin-auth-card" aria-labelledby="auth-title">
-    <a href="../index.html#home" class="admin-auth-brand">NXSPACE</a><span class="mode-chip">本機測試模式</span>
-    <h1 id="auth-title">NXSPACE 營運中心</h1>
-    <p>供 NXSPACE 管理人員及合作店家登入使用</p>
-    ${setup ? '<p class="admin-auth-note">首次使用請建立只存在此瀏覽器的管理帳號；密碼僅以加鹽雜湊保存。</p>' : '<p class="admin-auth-note">登入狀態會在關閉分頁或一小時後失效。</p>'}
-    <div class="admin-form-message" data-auth-message ${message ? "" : "hidden"}>${message}</div>
-    <form data-auth-form novalidate>
-      <label class="admin-field"><span>帳號</span><input name="username" autocomplete="username" minlength="4" required aria-describedby="auth-username-error"><span class="admin-field-error" id="auth-username-error"></span></label>
-      <label class="admin-field"><span>${setup ? "建立密碼" : "密碼"}</span><input name="password" type="password" autocomplete="${setup ? "new-password" : "current-password"}" minlength="8" required aria-describedby="auth-password-error"><span class="admin-field-error" id="auth-password-error"></span></label>
-      <button class="btn btn-primary admin-submit" type="submit">${setup ? "建立帳號並登入" : "登入營運中心"}</button>
-    </form>
-    <details><summary>測試模式說明</summary><p>目前為純前端本機展示環境，並非正式登入服務。系統不提供或保存預設明文密碼。</p></details>
-  </section></main>`;
-}
-
 export function createUnauthorizedPage() { return `<section class="admin-state"><span class="admin-state-code">403</span><h1>沒有操作權限</h1><p>目前登入帳號無法使用此管理功能。</p><a class="btn btn-primary" href="#dashboard">返回總覽</a></section>`; }
 export function createAdminNotFoundPage() { return `<section class="admin-state"><span class="admin-state-code">404</span><h1>找不到管理頁面</h1><p>此管理頁面不存在或已移動。</p><a class="btn btn-primary" href="#dashboard">返回總覽</a></section>`; }
 
-export function createDashboardHome(repository, operationsRepository) {
+export function createDashboardHome(repository, operationsRepository, { connected = true } = {}) {
   const today = new Date().toISOString().slice(0, 10);
   const activities = repository.list("activities");
   const vendors = repository.list("vendors");
@@ -53,9 +38,9 @@ export function createDashboardHome(repository, operationsRepository) {
     ["店家暫停接單", vendors.filter(item => item.acceptsOrders === false || item.acceptsOrders === "false").length],
     ["商品今日售完", repository.list("products").filter(item => item.soldOut === true || item.availability === "sold_out").length]
   ].filter(([,count]) => count);
-  return `<section><div class="admin-page-header"><div><span class="admin-eyebrow">NXSPACE 營運中心</span><h1>營運總覽</h1><p>${new Date().toLocaleDateString("zh-TW",{dateStyle:"full"})} 的跨場地營運摘要。</p></div><span class="mode-chip">本機測試模式</span></div>
-    <div class="admin-kpi-grid">${summary.map(([label,value])=>`<article><span>${label}</span><strong>${value ?? 0}</strong></article>`).join("")}</div>
-    <section class="admin-panel"><div class="admin-panel-heading"><div><h2>今日營運</h2><p>依開始時間排序的場地與活動資訊</p></div></div><div class="operations-agenda">${agenda.length ? agenda.map(item=>`<article><time>${escapeHtml(item.time)}–${escapeHtml(item.end)}</time><div><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.venue)} · ${escapeHtml(item.type)} · ${escapeHtml(item.partner)}</span></div><span class="admin-status is-published">${escapeHtml(item.status)}</span></article>`).join("") : '<div class="admin-empty"><p>今日尚無排定的場地或活動。</p></div>'}</div></section>
+  return `<section><div class="admin-page-header"><div><span class="admin-eyebrow">NXSPACE 營運中心</span><h1>營運總覽</h1><p>${connected ? new Date().toLocaleDateString("zh-TW",{dateStyle:"full"})+' 的跨場地營運摘要。' : '活動、場地、餐車及訂單資料尚未接入此工作台。'}</p></div><span class="mode-chip">${connected ? '本機測試模式' : '公益已接入'}</span></div>
+    <div class="admin-kpi-grid">${summary.map(([label,value])=>`<article><span>${label}</span><strong>${connected ? value ?? 0 : '—'}</strong></article>`).join("")}</div>
+    <section class="admin-panel"><div class="admin-panel-heading"><div><h2>今日營運</h2><p>依開始時間排序的場地與活動資訊</p></div></div><div class="operations-agenda">${!connected ? '<p>行程資料尚未接入。</p>' : agenda.length ? agenda.map(item=>`<article><time>${escapeHtml(item.time)}–${escapeHtml(item.end)}</time><div><strong>${escapeHtml(item.title)}</strong><span>${escapeHtml(item.venue)} · ${escapeHtml(item.type)} · ${escapeHtml(item.partner)}</span></div><span class="admin-status is-published">${escapeHtml(item.status)}</span></article>`).join("") : '<div class="admin-empty"><p>今日尚無排定的場地或活動。</p></div>'}</div></section>
     <div class="admin-home-grid"><section class="admin-panel"><div class="admin-panel-heading"><div><h2>待處理事項</h2><p>需要營運人員留意的項目</p></div></div>${pending.length ? `<ul class="operations-tasks">${pending.map(([label,count])=>`<li><span>${label}</span><strong>${count}</strong></li>`).join("")}</ul>` : '<div class="admin-empty"><p>目前沒有待處理事項。</p></div>'}</section>
     <section class="admin-panel"><div class="admin-panel-heading"><div><h2>快速入口</h2><p>未完成流程會顯示後續 Package 開放</p></div></div><div class="admin-quick-actions"><a href="#activities?action=new">新增場地活動</a><a href="#rental-invitations">建立場租邀請</a><a href="#availability">餐車月排</a><a href="#vendors?action=new">新增合作店家</a><a href="#products?action=new">新增商品</a><a href="#orders">查看訂單</a><a href="#pos">開啟 POS</a><a href="#notifications">查看通知中心</a></div></section></div></section>`;
 }
@@ -88,6 +73,7 @@ export function createManagementPage(type, records, state = {}) {
 
 function createEditorField(name, label, type, required) {
   const describedBy = `${name}-error`;
+  if(type==='placement')return `<label class="admin-field"><span>${label}</span><select name="${name}" required aria-describedby="${describedBy}"><option value="home">首頁重點活動</option><option value="news">最新消息</option></select>${renderFieldError(name)}</label>`;
   if (type === "textarea") return `<label class="admin-field"><span>${label}${required ? " *" : ""}</span><textarea name="${name}" rows="4" ${required?"required":""} aria-describedby="${describedBy}"></textarea>${renderFieldError(name)}</label>`;
   if (type === "status") return `<label class="admin-field"><span>${label}</span><select name="${name}" aria-describedby="${describedBy}"><option value="published">已發布</option><option value="draft">草稿</option><option value="archived">已下架</option></select>${renderFieldError(name)}</label>`;
   return `<label class="admin-field"><span>${label}${required ? " *" : ""}</span><input name="${name}" type="${type}" ${required?"required":""} aria-describedby="${describedBy}">${name==="image"?'<span class="admin-image-preview" data-image-preview>尚未設定圖片</span>':""}${renderFieldError(name)}</label>`;

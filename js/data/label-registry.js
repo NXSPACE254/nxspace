@@ -1,3 +1,4 @@
+import { runtimeMessage, runtimeStatusLabels } from "../utils/runtime-message.js";
 export const navigationLabels = Object.freeze({
   platform: "NXSPACE 營運中心", dashboard: "營運總覽", fieldDashboard: "場務總覽", merchantHome: "店家首頁",
   todayOperations: "今日營運", schedule: "今日行程", pos: "現場點單",
@@ -19,9 +20,9 @@ export const statusLabels = Object.freeze({
   cancelled: "已取消", unauthorized: "沒有操作權限", not_found: "找不到此頁面"
 });
 
-export const orderStatusLabels = Object.freeze({ pending_merchant_confirmation:"等待店家確認",accepted:"店家已接受",rejected:"店家已拒絕",preparing:"備餐中",ready:"可取餐",completed:"已完成",customer_cancelled:"顧客已取消",merchant_cancelled:"店家已取消",no_show:"未取餐" });
+export const orderStatusLabels = runtimeStatusLabels({ pending_merchant_confirmation:"等待店家確認",accepted:"店家已接受",rejected:"店家已拒絕",preparing:"備餐中",ready:"可取餐",completed:"已完成",customer_cancelled:"顧客已取消",merchant_cancelled:"店家已取消",no_show:"未取餐" });
 export const customizationTypeLabels = Object.freeze({ single:"單選",multiple:"複選",quantity:"數量",text:"文字備註" });
-export const notificationStatusLabels = Object.freeze({ local_only:"僅本機通知紀錄",not_configured:"LINE 通知尚未設定",pending:"等待通知",sent:"通知已送出",failed:"通知失敗",retrying:"準備重試" });
+export const notificationStatusLabels = Object.freeze({ local_only:"僅本機通知紀錄",not_configured:"LINE 通知尚未設定",pending:"等待通知",sent:runtimeMessage("本機模擬已處理（未寄送）", "通知已送出"),failed:"通知失敗",retrying:"準備重試" });
 
 export const roleLabels = Object.freeze({
   "Super Admin": "總管理", Admin: "NXSPACE 管理者", Manager: "場務管理者",
@@ -78,7 +79,7 @@ export const auditEventLabels = Object.freeze({
   "login.success": "登入成功", "login.failure": "登入失敗", "order.created": "建立訂單",
   "order.accepted": "店家接受訂單", "order.rejected": "店家拒絕訂單", "order.preparing": "開始備餐",
   "order.ready": "訂單可取餐", "order.completed": "訂單完成", "sensitive-data.revealed": "查看敏感資料",
-  "permission.denied": "操作遭拒", "notification.sent": "通知已送出", "notification.failed": "通知失敗",
+  "permission.denied": "操作遭拒", "notification.sent": runtimeMessage("本機模擬已處理（未寄送）", "通知已送出"), "notification.failed": "通知失敗",
   "order.merchant_cancelled":"店家取消訂單","order.customer_cancelled":"顧客取消訂單","product.sold-out":"商品標記售完","product.restored":"商品恢復販售","merchant.orders-started":"商店開始接單","merchant.orders-paused":"商店暫停接單","notification.created":"建立通知","notification.tested":"通知測試","notification.retried":"通知重試","role-preview.entered":"進入角色預覽","role-preview.exited":"離開角色預覽"
   ,"activity.created":"建立場地活動","activity.updated":"修改場地活動","invitation.created":"建立場租邀請","invitation.extend":"延長場租邀請","invitation.revoke":"撤銷場租邀請","invitation.regenerate":"重新產生場租邀請","invitation.reopen":"重新開放場租邀請","invitee.submitted":"租客送出資料","invitee.draft-saved":"租客儲存草稿","billing.opened":"開啟繳費資訊","billing.updated":"修改場租費用","monthly-schedule.created":"建立餐車月排"
   ,"merchant.created":"建立店家","merchant.updated":"修改店家","merchant.force-closed":"NXSPACE 強制關閉店家","merchant.force-reopened":"解除店家強制關閉","product.created":"建立商品","product.updated":"修改商品","product.price-updated":"修改商品價格","category.created":"建立商品分類","category.updated":"修改商品分類","customization.created":"建立客製化範本","customization.updated":"修改客製化範本","customization.applied":"套用客製化範本","supply.updated":"修改每日供應量","slot-capacity.updated":"修改時段容量","promotion.created":"建立優惠公告","promotion.updated":"修改優惠公告"

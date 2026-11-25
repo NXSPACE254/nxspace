@@ -1,0 +1,55 @@
+# Template only. All operational features default closed.
+name = "nxspace-christmas-intake"
+main = "src/intake-worker.mjs"
+compatibility_date = "2026-07-30"
+compatibility_flags = ["nodejs_compat"]
+workers_dev = false
+preview_urls = false
+
+[vars]
+DEPLOYMENT_MODE = "production-launch"
+STAFF_AUTH_MODE = "supabase"
+SUPABASE_URL = ""
+STAFF_LOGIN_EMAIL_DOMAIN = ""
+# Set STAFF_SUPER_LOGIN_EMAIL only with an approved exact address.
+STAFF_AUTH_DECOY_EMAIL = ""
+INTAKE_ORIGIN = "https://christmas.nxspace.tw"
+ACCESS_ISSUER = ""
+ACCESS_AUDIENCE = ""
+CAMPAIGN_ID = ""
+INTAKE_ENCRYPTION_VERSION = "v1"
+INTAKE_REQUEST_VERSION = "v1"
+FEATURE_INTAKE = "false"
+FEATURE_BROWSE = "false"
+FEATURE_ADOPT = "false"
+FEATURE_FULFILLMENT = "false"
+FEATURE_OWNER = "false"
+PRIVACY_APPROVED_VERSION = ""
+PRIVACY_EFFECTIVE_AT = ""
+PRIVACY_CONTROLLER = "卡馜咖啡館"
+PRIVACY_CONTACT = "" # 由正式部署配置供核定的公開聯絡方式
+PRIVACY_APPROVAL_REF = ""
+BOOKHOUSE_DISCLOSURE_REF = ""
+
+[assets]
+directory = "./dist/launch"
+binding = "ASSETS"
+run_worker_first = true
+html_handling = "none"
+
+# [[d1_databases]]
+# binding = "INTAKE_DB"
+# database_name = "nxspace-christmas-intake-prod"
+# database_id = "REPLACE_WITH_APPROVED_DATABASE_ID"
+# migrations_dir = "migrations"
+# Secrets: INTAKE_ENCRYPTION_KEYS, INTAKE_REQUEST_KEYS
+# Super Admin secret: STAFF_SUPER_TOTP
+# Supabase bindings: SUPABASE_PUBLISHABLE_KEY, SUPABASE_SECRET_KEY
+# Enable only after the Standard bucket is approved and provisioned.
+# [[r2_buckets]]
+# binding = "BRAND_MEDIA"
+# bucket_name = "nxspace-public-media"
+# [[ratelimits]]
+# name = "BRAND_MEDIA_RATE"
+# namespace_id = "310027"
+# simple = { limit = 120, period = 60 }

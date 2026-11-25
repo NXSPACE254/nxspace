@@ -30,6 +30,18 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.demo-notice {
+  padding: var(--space-4);
+  border-bottom: 2px solid var(--color-primary);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+}
+
+.demo-notice strong { display: block; }
+
 h1,
 h2,
 h3,

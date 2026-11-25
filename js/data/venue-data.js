@@ -1,5 +1,7 @@
+import { runtimeMessage } from "../utils/runtime-message.js";
+
 export const rentalStatuses = Object.freeze({
-  submitted: { label: "已送出", tone: "info" },
+  submitted: { label: runtimeMessage("本機測試已儲存（未送出）", "已送出"), tone: "info" },
   reviewing: { label: "審核中", tone: "warning" },
   approved: { label: "已核准", tone: "success" },
   rejected: { label: "未通過", tone: "danger" },
@@ -56,11 +58,7 @@ export const venues = [
     suitableFor: ["講座與分享會", "品牌活動", "展覽與市集", "公司或團體聚會"],
     facilities: ["投影設備", "基礎音響", "無線麥克風", "活動桌椅", "無線網路"],
     services: ["場地配置討論", "活動前設備測試", "基礎清潔", "現場交接"],
-    plans: [
-      { id: "tiehua-half", name: "半日方案", duration: "4 小時", price: "NT$ 8,000 起", note: "適合講座、工作坊與小型發表" },
-      { id: "tiehua-full", name: "全日方案", duration: "8 小時", price: "NT$ 14,000 起", note: "適合展覽、市集與完整活動日" },
-      { id: "tiehua-custom", name: "專案方案", duration: "依需求", price: "另行報價", note: "跨日、特殊設備或複合型活動" }
-    ],
+    plans: [{ id: "hourly", name: "每小時計費", duration: "依實際租借時數", price: "每小時 NT$500，未稅", note: "提交申請，由NXSPACE確認後提供匯款資訊；無線上付款" }],
     unavailableWeekdays: [1],
     unavailableDates: ["2026-08-03", "2026-08-10", "2026-08-17"],
     occupiedSlots: [
@@ -91,11 +89,7 @@ export const venues = [
     suitableFor: ["展覽與市集", "音樂與表演", "品牌活動", "公司或團體聚會"],
     facilities: ["基礎音響", "活動桌椅", "接待桌", "延長線與電源", "無線網路"],
     services: ["場地配置討論", "進撤場動線確認", "基礎清潔", "現場交接"],
-    plans: [
-      { id: "oasis-half", name: "半日方案", duration: "4 小時", price: "NT$ 6,000 起", note: "適合快閃、拍攝與小型聚會" },
-      { id: "oasis-full", name: "全日方案", duration: "8 小時", price: "NT$ 11,000 起", note: "適合市集、演出與品牌活動" },
-      { id: "oasis-custom", name: "專案方案", duration: "依需求", price: "另行報價", note: "大型配置、跨日或特殊進撤場" }
-    ],
+    plans: [{ id: "hourly", name: "每小時計費", duration: "依實際租借時數", price: "每小時 NT$500，未稅", note: "提交申請，由NXSPACE確認後提供匯款資訊；無線上付款" }],
     unavailableWeekdays: [2],
     unavailableDates: ["2026-08-04", "2026-08-11", "2026-08-18"],
     occupiedSlots: [
@@ -123,7 +117,7 @@ export const venues = [
     suitableFor: ["會議", "教育訓練", "課程", "讀書會"],
     facilities: ["投影機", "白板", "音響", "麥克風", "延長線"],
     services: ["場地配置討論", "設備測試", "基礎清潔", "現場交接"],
-    plans: [{ id: "donghai-half", name: "半日方案", duration: "4 小時", price: "NT$ 4,000 起", note: "適合會議與小型課程" }],
+    plans: [{ id: "hourly", name: "每小時計費", duration: "依實際租借時數", price: "每小時 NT$500，未稅", note: "提交申請，由NXSPACE確認後提供匯款資訊；無線上付款" }],
     unavailableWeekdays: [],
     unavailableDates: [],
     occupiedSlots: []
@@ -162,4 +156,14 @@ export function getVenueBySlug(slug = "") {
 
 export function getVenueById(id = "") {
   return venues.find((venue) => venue.id === id);
+}
+
+// Current shared hourly quote; historic applications retain their saved amounts.
+export function quoteIndoorRental(record) {
+  if (!['venue-tiehua','venue-donghai','venue-oasis'].includes(record.venueId)) throw new Error('此場地須另行報價。');
+  const start=Date.parse(record.startDate+'T00:00:00+08:00'), end=Date.parse((record.endDate||record.startDate)+'T00:00:00+08:00');
+  const minutes=v=>{if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(v||''))throw new Error('請確認租借時間。');const [h,m]=v.split(':').map(Number);return h*60+m;};
+  const hours=(minutes(record.endTime)-minutes(record.startTime))/60,days=(end-start)/86400000+1;
+  if(!Number.isInteger(days)||days<1||!Number.isFinite(start)||hours<=0)throw new Error('請確認日期及每日租借時間。');
+  const subtotal=Math.round(hours*days*500);return {hourlyRate:500,hours,days,subtotal,taxAmount:Math.round(subtotal*.05),totalAmount:subtotal+Math.round(subtotal*.05)};
 }

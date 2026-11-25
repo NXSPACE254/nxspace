@@ -1,0 +1,13 @@
+export const escapeChristmas=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+export const christmasDate=value=>Number.isFinite(value)?new Date(value*1000).toLocaleDateString('sv-SE',{timeZone:'Asia/Taipei'}):'尚無紀錄';
+export const christmasTime=value=>Number.isFinite(value)?new Date(value*1000).toLocaleString('zh-TW',{timeZone:'Asia/Taipei'}):'尚無紀錄';
+
+export function pageSlice(rows,page=1,size=12){const pages=Math.max(1,Math.ceil(rows.length/size)),current=Math.min(pages,Math.max(1,page));return {rows:rows.slice((current-1)*size,current*size),page:current,pages,total:rows.length};}
+export function pagination({page,pages,total}){return `<nav class="christmas-pagination" aria-label="分頁"><button type="button" data-page="${page-1}" ${page===1?'disabled':''}>上一頁</button>${Array.from({length:pages},(_,i)=>i).filter(i=>i===0||i===pages-1||Math.abs(i+1-page)<=1).map(i=>`<button type="button" data-page="${i+1}" ${i+1===page?'aria-current="page"':''}>${i+1}</button>`).join('')}<button type="button" data-page="${page+1}" ${page===pages?'disabled':''}>下一頁</button><span>共 ${total} 份，第 ${page}／${pages} 頁</span></nav>`;}
+export function openChristmasDialog({title='心願卡',onClose=()=>{},onClaimed=()=>{}}={}){
+ const parentDialog=document.querySelector('dialog[open].christmas-dialog:last-of-type');parentDialog?.classList.add('christmas-dialog-obscured');const previous=document.activeElement,dialog=document.createElement('dialog');dialog.className='christmas christmas-dialog';dialog.setAttribute('aria-label',title);dialog.innerHTML='<button class="christmas-dialog-close" type="button" aria-label="關閉視窗">×</button><div data-dialog-body></div>';document.body.append(dialog);dialog.addEventListener('christmas:claimed',event=>onClaimed(event.detail));
+ const close=()=>dialog.close();dialog.querySelector('button').addEventListener('click',close);dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)close();}});
+ const routeClose=()=>{if(dialog.isConnected)close();};window.addEventListener('hashchange',routeClose,{once:true});
+ dialog.addEventListener('close',()=>{window.removeEventListener('hashchange',routeClose);dialog.remove();parentDialog?.classList.remove('christmas-dialog-obscured');if(!document.querySelector('dialog[open]'))document.body.classList.remove('christmas-dialog-open');onClose();if(previous?.isConnected)previous.focus({preventScroll:true});},{once:true});
+ document.body.classList.add('christmas-dialog-open');dialog.showModal();return {dialog,body:dialog.querySelector('[data-dialog-body]'),close};
+}

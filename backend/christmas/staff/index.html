@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>聖誕公益心願建檔｜NXSPACE</title>
+  <link rel="stylesheet" href="/css/tokens.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/utilities.css">
+  <link rel="stylesheet" href="/css/components/button.css">
+  <link rel="stylesheet" href="/css/pages/christmas.css">
+  <script type="module" src="/js/christmas-intake.js"></script>
+</head>
+<body>
+  <main class="christmas container" data-christmas-admin>
+    <h1>NXSPACE 公益後台</h1>
+    <p role="status" data-intake-status>正在確認登入與建檔權限。</p>
+    <nav class="staff-admin-actions" aria-label="工作區">
+      <button type="button" data-intake-logout disabled>登出公益後台</button>
+      <a href="/staff/" data-intake-login hidden>重新驗證登入</a>
+      <button type="button" class="btn btn-secondary" data-intake-audit hidden>查看存取與操作紀錄</button>
+      <button type="button" class="btn btn-secondary" data-staff-accounts-toggle aria-expanded="false" hidden>系統管理</button>
+    </nav>
+    <details data-staff-self hidden>
+      <summary>我的帳號</summary>
+      <form method="post" data-self-profile>
+        <h2>基本資料</h2>
+        <p><label>顯示名稱 <input name="displayName" maxlength="80" autocomplete="name"></label></p>
+        <p><label>工作聯絡信箱 <input name="contactEmail" type="email" maxlength="254" autocomplete="email"></label></p>
+        <button disabled>儲存基本資料</button>
+        <p role="status"></p>
+      </form>
+      <form method="post" action="/christmas-api/staff-auth/password" data-self-password>
+        <h2>變更密碼</h2>
+        <p><label>目前密碼 <input name="password" type="password" required autocomplete="current-password"></label></p>
+        <p><label>新密碼<span data-password-hint></span> <input name="newPassword" type="password" required minlength="15" autocomplete="new-password"></label></p>
+        <p data-admin-code hidden><label>驗證器代碼 <input name="code" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code"></label></p>
+        <button>變更並重新登入</button>
+        <p role="status"></p>
+      </form>
+    </details>
+    <div data-intake-workspace>
+      <p class="christmas-notice">僅供授權人員建檔與審核。</p>
+      <details><summary>公益作業</summary><nav data-christmas-subnav aria-label="公益作業"></nav></details>
+      <section data-intake-content aria-label="心願案件"></section>
+      <section data-intake-events aria-label="公益操作紀錄" hidden></section>
+    </div>
+    <section class="staff-admin-panel" data-staff-accounts aria-label="系統管理" hidden></section>
+  </main>
+</body>
+</html>

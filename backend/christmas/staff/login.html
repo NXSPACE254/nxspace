@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>NXSPACE 營運中心</title>
+  <link rel="stylesheet" href="/public-assets/css/tokens.css">
+  <link rel="stylesheet" href="/public-assets/css/base.css">
+  <link rel="stylesheet" href="/public-assets/css/utilities.css">
+  <link rel="stylesheet" href="/public-assets/css/components/button.css">
+  <link rel="stylesheet" href="/public-assets/css/pages/dashboard.css">
+  <script type="module" src="/staff/login.js"></script>
+</head>
+<body class="dashboard-body">
+  <div data-unified-login></div>
+  <noscript>請啟用 JavaScript 後登入 NXSPACE 營運中心。</noscript>
+  <template data-first-password>
+    <form method="post" action="/christmas-api/staff-auth/password" data-password hidden>
+      <p>請先更換初始密碼，再登入使用後台。</p>
+      <label class="admin-field"><span>初始密碼</span><input name="password" type="password" required autocomplete="current-password"></label>
+      <label class="admin-field"><span>新密碼<span data-password-hint></span></span><input name="newPassword" type="password" required minlength="15" autocomplete="new-password"></label>
+      <label class="admin-field" data-password-mfa hidden><span>最高管理員驗證碼</span><input name="code" inputmode="numeric" pattern="[0-9]{6}" autocomplete="one-time-code" disabled></label>
+      <button class="btn btn-primary admin-submit" type="submit">變更並重新登入</button>
+    </form>
+  </template>
+</body>
+</html>

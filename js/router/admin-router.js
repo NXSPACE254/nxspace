@@ -7,8 +7,9 @@ export function parseAdminHash(hash = location.hash) {
   return { path: !path || path === "#" ? DEFAULT_ROUTE : path, query: new URLSearchParams(separator < 0 ? "" : value.slice(separator + 1)) };
 }
 
-export function createAdminRouter({ routes, onBeforeRoute, onRoute }) {
+export function createAdminRouter({ routes, onBeforeRoute, onRoute, interruptible = false }) {
   let disposed = false, version = 0, frame = 0, running = false, pending = null;
+  let active;
   let acceptedHash = location.hash || DEFAULT_ROUTE;
 
   async function drain() {
@@ -41,6 +42,22 @@ export function createAdminRouter({ routes, onBeforeRoute, onRoute }) {
     if (disposed) return;
     pending = { hash: location.hash, focus, version: ++version };
     cancelAnimationFrame(frame);
+    if (interruptible && !onBeforeRoute) {
+      active?.abort();
+      active = new AbortController();
+      const { signal } = active;
+      const request = pending;
+      frame = requestAnimationFrame(async () => {
+        const current = parseAdminHash(request.hash);
+        const isCurrent = () => !signal.aborted && request.hash === location.hash;
+        try {
+          await onRoute(routes.find(item => item.path === current.path), current, request.focus, isCurrent, signal);
+        } catch (error) {
+          if (isCurrent()) console.error("[NXSPACE] Admin route failed.", error);
+        }
+      });
+      return;
+    }
     frame = requestAnimationFrame(drain);
   }
   function handleLocationChange() { navigate(); }
@@ -65,6 +82,7 @@ export function createAdminRouter({ routes, onBeforeRoute, onRoute }) {
     navigate,
     destroy() {
       disposed = true;
+      active?.abort();
       version++;
       pending = null;
       cancelAnimationFrame(frame);

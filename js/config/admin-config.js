@@ -1,5 +1,8 @@
-export const adminNavigation = [
+const existingAdminNavigation = [
+  { group:'場地',label:'場館照片與位置',icon:'▧',href:'#venueProfiles',permission:'events.view',excludeRoles:['role-vendor'] },
+  { group:'公益', label:'聖誕公益管理', icon:'◇', href:'#christmas', permission:'dashboard.view', excludeRoles:['role-vendor'] },
   { group:"營運", label:"營運總覽", icon:"⌂", href:"#dashboard", permission:"dashboard.view", excludeRoles:["role-vendor","role-manager"] },
+  { group:"營運", label:"首頁重點與公告", icon:"✧", href:"#banners", permission:"banners.view", excludeRoles:["role-vendor"] },
   { group:"營運", label:"場務總覽", icon:"⌂", href:"#field-dashboard", permission:"dashboard.view", roles:["role-manager"] },
   { group:"今日營運", label:"店家首頁", icon:"⌂", href:"#merchant-home", permission:"dashboard.view", roles:["role-vendor"] },
   { group:"今日營運", label:"待處理訂單", icon:"▦", href:"#merchant-orders", permission:"orders.view", roles:["role-vendor"] },
@@ -39,7 +42,15 @@ export const adminNavigation = [
   { group:"系統", label:"驗收中心", icon:"✓", href:"#acceptance", permission:"settings.view" }
 ];
 
+// Group existing destinations without removing routes or changing permissions.
+const activityWorkspace = new Set(['#activity-operations','#registration-settings','#registration-attendees','#venue-finance','#food-truck-monthly-billing','#field-checklists','#venue-activities','#rentals','#rental-invitations','#venue-billing']);
+const foodWorkspace = new Set(['#merchant-home','#merchant-orders','#orders','#pos','#today-revenue','#customer-history','#commerce-products','#product-categories','#customizations','#daily-supplies','#slot-capacities','#merchant-profile','#promotion-notices','#merchant-notifications','#food-truck-schedule']);
+const systemWorkspace = new Set(['#users','#roles','#role-preview','#integrations','#settings','#audit','#acceptance']);
+export const adminWorkspaceOrder = Object.freeze(['營運中心','活動與場地','餐車營運','合作夥伴','聖誕公益','系統管理']);
+export const adminNavigation = existingAdminNavigation.map(item=>({...item,group:item.href==='#christmas'?'聖誕公益':activityWorkspace.has(item.href)?'活動與場地':foodWorkspace.has(item.href)?'餐車營運':item.href==='#commerce-merchants'?'合作夥伴':systemWorkspace.has(item.href)?'系統管理':'營運中心',label:item.href==='#merchant-orders'?'今日訂單工作台':item.label}));
+
 export const managementSchemas = {
+  venueProfiles:{title:'場館照片與位置',singular:'場館公開資料',permission:'events',titleField:'title',fields:[['title','場館名稱','text',true],['slug','場館網址代稱（請保留）','text',true],['image','自有或已授權照片 HTTPS 網址','url',false],['photoCredit','照片授權或來源說明','text',false],['address','已核對完整地址（未確認請留白）','text',false],['transport','位置與交通資訊（未確認請留白）','textarea',false],['status','公開狀態','status',true]]},
   activities: { title: "活動管理", singular: "活動", permission: "events", titleField: "title", fields: [
     ["title", "活動名稱", "text", true], ["slug", "Slug", "text", true], ["tag", "分類", "text", true], ["date", "日期顯示", "text", true], ["sortDate", "排序日期", "date", true], ["time", "時間", "text", true], ["location", "場地", "text", true], ["capacity", "名額", "number", false], ["registrationUrl", "報名 URL", "url", false], ["image", "圖片 URL", "url", false], ["description", "摘要", "textarea", true], ["content", "完整內容", "textarea", true], ["status", "狀態", "status", true]
   ]},
@@ -49,7 +60,7 @@ export const managementSchemas = {
   products: { title: "商品管理", singular: "商品", permission: "products", titleField: "title", fields: [
     ["title", "商品名稱", "text", true], ["merchantId", "所屬商店 ID", "text", true], ["slug", "網址代稱", "text", true], ["sku", "商品編號", "text", false], ["vendor", "商家", "text", true], ["tag", "分類", "text", true], ["price", "價格", "number", true], ["originalPrice", "原價", "number", false], ["stock", "庫存", "number", false], ["soldOut", "售完（true／false）", "text", false], ["availableDays", "供應星期（0–6，逗號分隔）", "text", false], ["availableSlots", "供應時段（逗號分隔）", "text", false], ["maxQuantity", "每筆最大數量", "number", false], ["availability", "供應狀態", "text", false], ["image", "圖片 URL", "url", false], ["description", "摘要", "textarea", true], ["content", "商品說明", "textarea", true], ["status", "狀態", "status", true]
   ]},
-  banners: { title: "Banner 管理", singular: "Banner", permission: "banners", titleField: "title", fields: [
-    ["title", "標題", "text", true], ["slug", "Slug", "text", true], ["eyebrow", "眉題", "text", false], ["placement", "版位", "text", true], ["priority", "優先順序", "number", true], ["publishStart", "發布開始", "date", false], ["publishEnd", "發布結束", "date", false], ["label", "CTA 文字", "text", true], ["href", "CTA URL", "text", true], ["image", "圖片 URL", "url", false], ["description", "內容", "textarea", true], ["status", "狀態", "status", true]
+  banners: { title: "首頁重點與公告", singular: "重點活動／公告", permission: "banners", titleField: "title", fields: [
+    ["title", "標題", "text", true], ["slug", "網址代稱", "text", true], ["eyebrow", "眉題", "text", false], ["placement", "顯示位置", "placement", true], ["priority", "優先順序", "number", true], ["publishStart", "發布開始", "date", false], ["publishEnd", "發布結束", "date", false], ["label", "按鈕文字", "text", true], ["href", "連結", "text", true], ["image", "圖片網址（使用自有素材）", "url", false], ["description", "內容", "textarea", true], ["status", "狀態", "status", true]
   ]}
 };
